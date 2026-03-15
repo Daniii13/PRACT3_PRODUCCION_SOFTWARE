@@ -1,31 +1,38 @@
 name: CI
 
 on:
-  push:
-    branches: ["**"]
+    push:
+        branches: ["**"]
 
 jobs:
-  lint-and-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    lint-and-test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Set up Python
+            - name: Install uv
+              uses: astral-sh/setup-uv@v5
 
-      - name: Install uv
+            - name: Set up Python
+              run: uv python install
 
-      - name: Install dependencies
+            - name: Install dependencies
+              run: uv sync
 
-      - name: Install ruff and mypy
+            - name: Comprobar errores en el código
+              run: uv run ruff check .
 
-      - name: Ruff format
+            - name: Formatear el código
+              run: uv run ruff format . --check
 
-      - name: Ruff linter
+            - name: Verificar tipos estáticos
+              run: uv run mypy .
 
-      - name: Mypy
+            - name: Ejecutar tests unitarios
+              run: uv run pytest ./core/tests/unit
 
-      - name: Unit tests
+            - name: Ejecutar tests de integración
+              run: uv run pytest ./core/tests/integration
 
-      - name: Integration tests
-
-      - name: BDD tests
+            - name: Ejecutar tests de BDD
+              run: uv run pytest ./core/tests/behaviour
