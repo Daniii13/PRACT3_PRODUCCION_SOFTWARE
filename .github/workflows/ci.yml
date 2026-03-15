@@ -28,11 +28,5 @@ jobs:
             - name: Verificar tipos estáticos
               run: uv run mypy .
 
-            - name: Ejecutar tests unitarios
-              run: uv run pytest ./core/tests/unit
-
-            - name: Ejecutar tests de integración
-              run: uv run pytest ./core/tests/integration
-
-            - name: Ejecutar tests de BDD
-              run: uv run pytest ./core/tests/behaviour
+            - name: Ejecutar todos los tests
+              run: uv run pytest
